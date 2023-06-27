@@ -1,0 +1,16 @@
+{% extends './layout.html'%}
+{% block title %}Login{% endblock title%}
+
+{% block CustomCss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}"/>
+{% endblock CustomCss %}
+
+{% block body %}
+<div>
+    <form action="/login" method="POST">
+        <input type="email" placeholder="name@example.com" name="email" maxlength="256"/>
+        <input type="password" placeholder="Password" name="password" maxlength="256"/>
+        <button type="submit">Sign in</button>
+    </form>        
+</div>
+{% endblock body %}
