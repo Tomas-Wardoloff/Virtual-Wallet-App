@@ -1,0 +1,7 @@
+{% extends './layout.html'%}
+{% block title %}Home Page{% endblock title%}
+
+{% block body %}
+    <h1>Bienvenido {{ current_user.Email }}</h1>
+    <a href="{{ url_for('logout') }}">logout</a>
+{% endblock body %}
