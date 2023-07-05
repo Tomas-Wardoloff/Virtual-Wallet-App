@@ -29,7 +29,7 @@ def login():
         user = User(None, request.form["email"], request.form["password"])
         logged_user = ModelUser.login(database, user)
         if logged_user != None:
-            if logged_user.Password:
+            if logged_user.password:
                 login_user(logged_user)
                 return redirect(url_for("home"))
     return render_template("auth/login.html")
