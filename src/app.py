@@ -52,6 +52,16 @@ def home():
     return render_template("home.html")
 
 
+def status_401(error):
+    return redirect(url_for("login"))
+
+
+def status_404(error):
+    return "<h1>Opps the requested URL was not found on this server</h1>", 404
+
+
 if __name__ == "__main__":
     app.config.from_object(config["development"])
+    app.register_error_handler(401, status_401)
+    app.register_error_handler(404, status_404)
     app.run()
