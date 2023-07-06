@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_mysqldb import MySQL
 
@@ -20,28 +20,35 @@ def load_user(id):
 
 @app.route("/")
 def index():
-    return redirect(url_for("login"))
+    return redirect(url_for("signup"))
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        user = User(None, request.form["email"], request.form["password"])
+        user = User(None, request.form["email"], request.form["password"], None, None)
         logged_user = ModelUser.login(database, user)
         if logged_user != None:
             if logged_user.password:
                 login_user(logged_user)
                 return redirect(url_for("home"))
+            else:
+                flash("Invalid password...")
+                return render_template("auth/login.html")
+        else:
+            flash("User not found...")
+            return render_template("auth/login.html")
     return render_template("auth/login.html")
 
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("login"))
 
 
-@app.route("/signup")
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
     return render_template("auth/register.html")
 

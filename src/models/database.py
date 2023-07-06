@@ -1,4 +1,6 @@
-from MySQLdb import ProgrammingError, OperationalError 
+from MySQLdb import ProgrammingError, OperationalError
+
+
 def get_data(database, query: str, params: tuple = ()) -> list:
     try:
         cursor = database.connection.cursor()

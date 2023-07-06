@@ -43,13 +43,15 @@ I am trying to write as much clean code as possible, so I am using the [black](h
 # Database
 
 From the beginning, I knew I was going to work with a database and what data I wanted to store, but I did not know how to struct the database. So I asked Chat-GTP.
-After chatting and seeing different databases that Chat-GTP provided me, I modified one of those ideas and came out with this:
+After chatting and seeing different databases that Chat-GTP provided me, I modified one of those ideas and came out with this. 
+The database structure is not the same as the one used in the other version of the project. I added more columns to the user table.
 
 - **Users**
-  The Users table will store information about each user, such as their email and password. Each user will have a unique identifier, which will serve as the primary key for this table.
+  The Users table will store information about each user, such as their first name, last name, email and password. Each user will have a unique identifier, which will serve as the primary key for this table.
 
 - **Categories**
   This table only stores the information of the different categories that the users can use to identify their transactions, and like the user's table, it has a unique identifier. The users can create their own categories, which is why this table has a foreign key that references the Users table. The categories with UserId = 0 are accessible to all the users.
+
 - **Transactions**
   This table store information about each transaction made by the users. This table will have two foreign keys, one references the User table so each transaction will be associated with a particular user, and the other one references the Categories table.
 
