@@ -2,6 +2,6 @@
 {% block title %}Home Page{% endblock title%}
 
 {% block body %}
-    <h1>Bienvenido {{ current_user.Email }}</h1>
+    <h1>Bienvenido {{ current_user.first_name }}</h1>
     <a href="{{ url_for('logout') }}">logout</a>
 {% endblock body %}

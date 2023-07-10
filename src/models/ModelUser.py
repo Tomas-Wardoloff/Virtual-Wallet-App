@@ -6,32 +6,32 @@ class ModelUser:
     @classmethod
     def login(cls, database, email, password) -> User | None:
         query = """
-            SELECT UserId, Email, First_name, Last_name, Password FROM users WHERE Email = %s
+            SELECT id, first_name, last_name, email, password FROM users WHERE Email = %s
         """
         match_user = get_data(database, query, (email,))
-        if match_user:    
+        if match_user:
             return User(
                 match_user[0][0],
                 match_user[0][1],
-                User.check_password(match_user[0][2], password),
                 match_user[0][2],
                 match_user[0][3],
+                User.check_password(match_user[0][4], password),
             )
         return None
 
     @classmethod
     def get_user_by_id(cls, database, id) -> User | None:
         query = """
-            SELECT UserId, Email, First_name, Last_name FROM users WHERE UserId = %s
+            SELECT id, first_name, last_name, email FROM users WHERE id = %s
         """
         match_user = get_data(database, query, (id,))
         if match_user != ():
             return User(
                 match_user[0][0],
                 match_user[0][1],
-                None,
                 match_user[0][2],
                 match_user[0][3],
+                None,
             )
         return None
 
@@ -41,14 +41,12 @@ class ModelUser:
             SELECT * FROM users WHERE Email = %s
         """
         match_user = get_data(database, query, (email,))
-        if match_user == ():
-            return False
-        return True
+        return bool(match_user)
 
     @classmethod
     def signup_user(cls, database, params) -> None:
         create_user_query = """
-            INSERT INTO users (First_name, Last_name, Email, Password) VALUES (%s, %s, %s, %s)
+            INSERT INTO users (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)
         """
         run_query(database, create_user_query, params)
         print("User successfully registered!")
