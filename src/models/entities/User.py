@@ -10,10 +10,10 @@ class User(UserMixin):
         self.email = email
         self.password = password
 
-    @classmethod
-    def check_password(cls, hashed_password, password):
+    @staticmethod 
+    def check_password(hashed_password: str, password: str) -> bool:
         return check_password_hash(hashed_password, password)
 
-    @classmethod
-    def hash_password(cls, password: str) -> str:
+    @staticmethod 
+    def hash_password(password: str) -> str:
         return generate_password_hash(password)
