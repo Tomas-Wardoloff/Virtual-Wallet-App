@@ -49,4 +49,3 @@ class ModelUser:
             INSERT INTO users (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)
         """
         run_query(database, create_user_query, params)
-        print("User successfully registered!")

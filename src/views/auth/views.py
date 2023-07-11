@@ -1,5 +1,5 @@
 from app import database, login_manager_app
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import login_required, login_user, logout_user
 
 from models.entities.User import User
@@ -33,10 +33,10 @@ def login():
                 login_user(logged_user)
                 return redirect(url_for("main_bp.index"))
             else:
-                print("Invalid password...")
+                flash("Invalid password...")
                 return render_template("login.html")
         else:
-            print("User not found...")
+            flash("User not found...")
             return render_template("login.html")
     return render_template("login.html")
 
@@ -57,7 +57,8 @@ def signup():
                     database, request.form["email"], request.form["password"]
                 )
             )
+            flash("User successfully registered!")
             return redirect("/home")
         else:
-            print("User already exists")
+            flash("User already exists")
     return render_template("register.html")
