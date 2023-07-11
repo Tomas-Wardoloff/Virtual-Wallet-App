@@ -3,5 +3,5 @@
 
 {% block body %}
     <h1>Bienvenido {{ current_user.first_name }}</h1>
-    <a href="{{ url_for('logout') }}">logout</a>
+    <a href="{{ url_for('auth_bp.logout') }}">logout</a>
 {% endblock body %}

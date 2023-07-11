@@ -3,15 +3,14 @@
 
 {% block body %}
 <div>    
-    <form action="/signup" method="POST">
-        <input type="text" placeholder="First Name" name="first_name" maxlength="256" required/>
-        <input type="text" placeholder="Last Name" name="last_name" maxlength="256" required/>
+    <form action="{{ url_for('auth_bp.signup') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="text" placeholder="First Name" name="first_name" minlength="2" maxlength="256" required/>
+        <input type="text" placeholder="Last Name" name="last_name" minlength="2" maxlength="256" required/>
         <input type="email" placeholder="Email" name="email" maxlength="256" required/>
-        <input type="password" placeholder="Password" name="password" maxlength="256" required/>
-        <input type="password" placeholder="Confirm Password" name="confirm_password" maxlength="256" required/>
+        <input type="password" placeholder="Password" name="password" minlength="8" maxlength="256" required/>
         <button type="submit">Sign up</button>
-        <a href="{{ url_for('login') }}"></a>
     </form>     
-    <small> Are you already a member? <a href="{{ url_for('login') }}">Sign In</a></small>   
+    <small> Are you already a member? <a href="{{ url_for('auth_bp.login') }}">Sign In</a></small>   
 </div>
 {% endblock body %}
