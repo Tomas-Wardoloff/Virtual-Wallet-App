@@ -11,6 +11,8 @@ app.config.from_object(config["development"])
 database = MySQL(app)
 
 login_manager_app = LoginManager(app)
+login_manager_app.login_view = "auth_bp.login"
+login_manager_app.login_message_category = "info"
 
 csrf = CSRFProtect(app)
 csrf.init_app(app)

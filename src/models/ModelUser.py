@@ -1,10 +1,11 @@
 from .database import get_data, run_query
+from app import database
 from .entities.User import User
 
 
 class ModelUser:
     @classmethod
-    def login(cls, database, email, password) -> User | None:
+    def login(cls, email, password) -> User | None:
         query = """
             SELECT id, first_name, last_name, email, password FROM users WHERE Email = %s
         """
@@ -20,7 +21,7 @@ class ModelUser:
         return None
 
     @classmethod
-    def get_user_by_id(cls, database, id) -> User | None:
+    def get_user_by_id(cls, id) -> User | None:
         query = """
             SELECT id, first_name, last_name, email FROM users WHERE id = %s
         """
@@ -36,7 +37,7 @@ class ModelUser:
         return None
 
     @classmethod
-    def check_user_existence(cls, database, email) -> bool:
+    def check_user_existence(cls, email) -> bool:
         query = """
             SELECT * FROM users WHERE Email = %s
         """
@@ -44,7 +45,7 @@ class ModelUser:
         return bool(match_user)
 
     @classmethod
-    def signup_user(cls, database, params) -> None:
+    def signup_user(cls, params) -> None:
         create_user_query = """
             INSERT INTO users (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)
         """

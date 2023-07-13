@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+
+from models.ModelUser import ModelUser
 
 
 class RegistrationForm(FlaskForm):
@@ -23,6 +25,10 @@ class RegistrationForm(FlaskForm):
     )
     submit = SubmitField("Sign Up")
     
+    def validate_email(cls, email):
+        if ModelUser.check_user_existence(email.data):
+            raise ValidationError(f"That email is already taken. Please choose a different one")
+    
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField(
@@ -30,3 +36,7 @@ class LoginForm(FlaskForm):
         validators=[DataRequired(),],
     )
     submit = SubmitField("Sign In")
+    
+    def validate_email(cls, email):
+        if not ModelUser.check_user_existence(email.data):
+            raise ValidationError(f"User {email.data} was not found.")
