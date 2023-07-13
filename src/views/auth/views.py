@@ -39,8 +39,8 @@ def login():
             return redirect(url_for("main_bp.index"))
         else:
             flash(f"Login Unseccessful. Please check email and password", "danger")
-            return render_template("login.html", form=form)
-    return render_template("login.html", form=form)
+            return render_template("login.html", form=form, title="Login")
+    return render_template("login.html", form=form, title="Login")
 
 
 @auth_bp.route("signup", methods=["GET", "POST"])
@@ -64,4 +64,4 @@ def signup():
             )
             flash(f"Account created for {form.email.data}!", "success")
             return redirect("/home")
-    return render_template("register.html", form=form)
+    return render_template("register.html", form=form, title="Register")
