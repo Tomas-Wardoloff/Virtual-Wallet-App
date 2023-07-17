@@ -1,7 +1,9 @@
-from MySQLdb import ProgrammingError, OperationalError
+from MySQLdb import OperationalError, ProgrammingError
+
+from app import database
 
 
-def get_data(database, query: str, params: tuple = ()) -> list:
+def get_data(query: str, params: tuple = ()) -> list:
     try:
         with database.connection.cursor() as cursor:
             cursor.execute(query, params)
@@ -14,7 +16,7 @@ def get_data(database, query: str, params: tuple = ()) -> list:
         raise Exception(f"Error inesperado: {ex}")
 
 
-def run_query(database, query: str, params: tuple = ()) -> None:
+def run_query(query: str, params: tuple = ()) -> None:
     try:
         with database.connection.cursor() as cursor:
             cursor.execute(query, params)

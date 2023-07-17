@@ -1,6 +1,6 @@
 from .database import get_data, run_query
-from app import database
 from .entities.User import User
+from .entities.Wallet import Wallet
 
 
 class ModelUser:
@@ -9,7 +9,7 @@ class ModelUser:
         query = """
             SELECT id, first_name, last_name, email, password FROM users WHERE Email = %s
         """
-        match_user = get_data(database, query, (email,))
+        match_user = get_data(query, (email,))
         if match_user:
             return User(
                 match_user[0][0],
@@ -25,15 +25,9 @@ class ModelUser:
         query = """
             SELECT id, first_name, last_name, email FROM users WHERE id = %s
         """
-        match_user = get_data(database, query, (id,))
-        if match_user != ():
-            return User(
-                match_user[0][0],
-                match_user[0][1],
-                match_user[0][2],
-                match_user[0][3],
-                None,
-            )
+        match_user = get_data(query, (id,))
+        if match_user:
+            return User(*match_user[0], None)
         return None
 
     @classmethod
@@ -41,7 +35,7 @@ class ModelUser:
         query = """
             SELECT * FROM users WHERE Email = %s
         """
-        match_user = get_data(database, query, (email,))
+        match_user = get_data(query, (email,))
         return bool(match_user)
 
     @classmethod
@@ -49,4 +43,19 @@ class ModelUser:
         create_user_query = """
             INSERT INTO users (first_name, last_name, email, password) VALUES (%s, %s, %s, %s)
         """
-        run_query(database, create_user_query, params)
+        run_query(create_user_query, params)
+
+    @classmethod
+    def create_user_wallet(cls, params) -> bool:
+        create_wallet_query = """
+            INSERT INTO wallets (balance, currency, user_id) VALUES (%s, %s, %s)
+        """
+        run_query(create_wallet_query, params)
+
+    @classmethod
+    def get_user_wallet(cls, user_id) -> Wallet:
+        get_wallet_query = """
+            SELECT user_id, balance, currency FROM wallets WHERE user_id = %s
+        """
+        wallet_data = get_data(get_wallet_query, (user_id,))
+        return Wallet(*wallet_data[0])
