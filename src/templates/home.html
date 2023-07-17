@@ -1,6 +1,7 @@
 {% extends './layout.html'%}
 
 {% block body %}
-    <h1>Bienvenido {{ current_user.first_name }}</h1>
+    <h1>Bienvenido {{ current_user.email }}</h1>
+    <a href="{{ url_for('main_bp.new_transaction') }}">New Transaction</a>
     <a href="{{ url_for('auth_bp.logout') }}">logout</a>
 {% endblock body %}

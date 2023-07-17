@@ -1,0 +1,154 @@
+{% extends './layout.html'%}
+
+{% block body %}
+<main role="main" class="container">
+    <form action="{{ url_for('main_bp.new_transaction') }}" method="POST" role="form">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+        <legend class="border-bottom mb-4">New Transaction</legend>
+            <div class="row align-items-center">
+                <div class="col">
+                    {% if form.amount.errors %}
+                        {{ form.amount(class="form-control is-invalid", placeholder="Amount")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.amount.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.amount(class="form-control", placeholder="Amount") }}                
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if form.date.errors %}
+                        {{ form.date(class="form-control is-invalid", placeholder="Date")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.date(class="form-control", placeholder="Date") }}                
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if form.type.errors %}
+                        {{ form.type(class="form-control is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.type.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.type(class="form-control") }}                
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if form.category.errors %}
+                        {{ form.category(class="form-control is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.category.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.category(class="form-control") }}                
+                    {% endif %}
+                </div>
+                <div class="col">
+                    {% if form.description.errors %}
+                        {{ form.description(class="form-control is-invalid", placeholder="Description")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.description.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.description(class="form-control", placeholder="Description") }}                
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div class="form-group mb-3">
+        {{ form.submit(class="btn btn-outline-info") }}
+        <a href="{{ url_for('main_bp.index') }}">Back</a>
+    </div>
+</main>
+<!--
+<form action="{{ url_for('main_bp.new_transaction') }}" method="POST" role="form">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">New Transaction</legend>
+        <div class="form-group">
+            {{ form.amount.label(class="form-label") }}
+            {% if form.amount.errors %}
+                {{ form.amount(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.amount.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.amount(class="form-control") }}                
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.type.label(class="form-label") }}
+            {% if form.type.errors %}
+                {{ form.type(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.type.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.type(class="form-control") }}                
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.description.label(class="form-label") }}
+            {% if form.description.errors %}
+                {{ form.description(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.description.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.description(class="form-control") }}                
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.date.label(class="form-label") }}
+            {% if form.date.errors %}
+                {{ form.date(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.date.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.date(class="form-control") }}                
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.category.label(class="form-label") }}
+            {% if form.category.errors %}
+                {{ form.category(class="form-control is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.category.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.category(class="form-control") }}                
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </fieldset>
+</form>
+-->
+{% endblock body %}
