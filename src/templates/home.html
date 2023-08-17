@@ -2,6 +2,7 @@
 
 {% block body %}
     <h1>Bienvenido {{ current_user.email }}</h1>
+    <p>Your balance is: <strong> ${{ wallet.balance }} </strong></p>
     <a href="{{ url_for('main_bp.new_transaction') }}">New Transaction</a>
     <a href="{{ url_for('auth_bp.logout') }}">logout</a>
 {% endblock body %}
