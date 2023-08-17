@@ -3,9 +3,3 @@ class Wallet:
         self.user_id = user_id
         self.balance = balance
         self.currency = currency
-
-    def update_balance(self, transaction_amount, transaction_type) -> None:
-        if transaction_type == "Income":
-            self.balance += transaction_amount
-        else:
-            self.balance -= transaction_amount
