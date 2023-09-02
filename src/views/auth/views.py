@@ -1,11 +1,10 @@
-from app import login_manager_app
-from flask import Blueprint, redirect, render_template, request, url_for, flash
-from flask_login import login_required, login_user, logout_user, current_user
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 
+from app import login_manager_app
+from forms.auth_forms import LoginForm, RegistrationForm
 from models.entities.User import User
 from models.ModelUser import ModelUser
-from forms.auth_forms import RegistrationForm, LoginForm
-
 
 auth_bp = Blueprint(
     "auth_bp", __name__, url_prefix="/auth", template_folder="../../templates/auth/"
@@ -28,11 +27,11 @@ def logout():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("main_bp.index"))
+
     form = LoginForm()
     if form.validate_on_submit():
-        logged_user = ModelUser.login(
-            form.email.data, form.password.data
-        )
+        logged_user = ModelUser.login(form.email.data, form.password.data)
+
         if logged_user.password:
             login_user(logged_user)
             flash(f"You have been logged in as {form.email.data}!", "success")
@@ -40,6 +39,7 @@ def login():
         else:
             flash(f"Login Unseccessful. Please check email and password", "danger")
             return render_template("login.html", form=form, title="Login")
+
     return render_template("login.html", form=form, title="Login")
 
 
@@ -47,21 +47,22 @@ def login():
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for("main_bp.index"))
+
     form = RegistrationForm()
     if form.validate_on_submit():
         if not ModelUser.check_user_existence(form.email.data):
-            params = (
+            user_params = (
                 form.first_name.data.capitalize(),
                 form.last_name.data.capitalize(),
                 form.email.data,
                 User.hash_password(form.password.data),
             )
-            ModelUser.signup_user(params)
-            login_user(
-                ModelUser.login(
-                    form.email.data, form.password.data
-                )
-            )
+            ModelUser.signup_user(user_params)
+
+            user_created = ModelUser.login(form.email.data, form.password.data)
+            ModelUser.create_user_wallet((float(0), "USD", user_created.id))
+
+            login_user(user_created)
             flash(f"Account created for {form.email.data}!", "success")
-            return redirect("/home")
+            return redirect(url_for("main_bp.index"))
     return render_template("register.html", form=form, title="Register")

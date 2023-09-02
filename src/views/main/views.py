@@ -1,17 +1,48 @@
-from flask import Blueprint, render_template
-from flask_login import login_required
+from flask import Blueprint, render_template, redirect, url_for, flash
+from flask_login import current_user, login_required
+
+from forms.transaction_forms import TransactionForm
+from models.ModelTransaction import ModelTransaction
+from models.ModelUser import ModelUser
+from models.ModelWallet import ModelWallet
+
 
 main_bp = Blueprint(
     "main_bp", __name__, url_prefix="/home", template_folder="../../templates/"
 )
 
 
-@main_bp.route("/")
+@main_bp.route("/", methods=["GET"])
 @login_required
 def index():
-    return render_template("home.html", title="Dashboard")
+    user_wallet = ModelUser.get_user_wallet(current_user.id)
+    last_transactions = ModelTransaction.get_last_transactions_json(current_user.id)
+    return render_template(
+        "home.html",
+        title="Dashboard",
+        wallet=user_wallet,
+        transactions=last_transactions.json["transactions"],
+    )
 
-#@main_bp.route("/transaction/new")
-#@login_required
-#def index():
-#    return render_template("home.html", title="New Transaction")
+
+@main_bp.route("/new_transaction", methods=["GET", "POST"])
+@login_required
+def new_transaction():
+    form = TransactionForm()
+    if form.validate_on_submit():
+        transaction_params = (
+            form.amount.data,
+            form.date.data,
+            form.type.data,
+            form.category.data,
+            form.description.data,
+            current_user.id,
+        )
+        print(transaction_params)
+        ModelTransaction.upload_transaction(transaction_params)
+
+        user_wallet = ModelUser.get_user_wallet(current_user.id)
+        ModelWallet.update_balance(user_wallet, form.amount.data, form.type.data)
+        flash(f"transaction uploaded successfully!", "success")
+        return redirect(url_for("main_bp.index"))
+    return render_template("new_transaction.html", title="New Transaction", form=form)
