@@ -12,11 +12,17 @@ main_bp = Blueprint(
 )
 
 
-@main_bp.route("/")
+@main_bp.route("/", methods=["GET"])
 @login_required
 def index():
     user_wallet = ModelUser.get_user_wallet(current_user.id)
-    return render_template("home.html", title="Dashboard", wallet=user_wallet)
+    last_transactions = ModelTransaction.get_last_transactions_json(current_user.id)
+    return render_template(
+        "home.html",
+        title="Dashboard",
+        wallet=user_wallet,
+        transactions=last_transactions.json["transactions"],
+    )
 
 
 @main_bp.route("/new_transaction", methods=["GET", "POST"])

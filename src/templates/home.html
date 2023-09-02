@@ -1,8 +1,35 @@
 {% extends './layout.html'%}
 
 {% block body %}
-    <h1>Bienvenido {{ current_user.email }}</h1>
-    <p>Your balance is: <strong> ${{ wallet.balance }} </strong></p>
+    <h2>{{ current_user.email }}</h2>
+    <p class="fs-4">Your balance is: <strong>${{ wallet.balance }}</strong></p>
+
+    <table class="table table-hover caption-top">
+        <caption>Last transactions made</caption>
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in transactions %}
+                <tr>
+                    {% if row["Type"] == "Expense" %}
+                        <td class="text-danger fw-bold">${{ row["Amount"] }}</td>
+                    {% else %}
+                        <td class="text-success fw-bold">${{ row["Amount"] }}</td>
+                    {% endif %}
+                    <td>{{ row["Date"] }}</td>
+                    <td>{{ row["Type"] }}</td>
+                    <td>{{ row["Category"] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     <a href="{{ url_for('main_bp.new_transaction') }}">New Transaction</a>
     <a href="{{ url_for('auth_bp.logout') }}">logout</a>
 {% endblock body %}
