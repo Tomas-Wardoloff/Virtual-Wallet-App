@@ -4,6 +4,17 @@
     <h2>{{ current_user.email }}</h2>
     <p class="fs-4">Your balance is: <strong>${{ wallet.balance }}</strong></p>
 
+    <nav class="navbar navbar-expand-lg navbar-light border rounded"> <!-- [ ] find the way to make the links more cool -->
+        <div class="collapse navbar-collapse d-inline-block justify-content-center" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" href="#" id="nav-daily-link" style="transition: all 1s ease-out;">Daily</a>
+                <a class="nav-link" href="#" id="nav-monthly-link" style="transition: all 1s ease-out;">Monthly</a>
+                <a class="nav-link" href="#" id="nav-summary-link" style="transition: all 1s ease-out;">Summary</a>
+            </div>
+        </div>
+    </div>
+    </nav>
+
     <table class="table table-hover caption-top">
         <caption>Last transactions made</caption>
         <thead class="table-dark">
@@ -14,7 +25,7 @@
                 <th scope="col">Category</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody> <!-- [ ]  find the way to call the displaytransactions functio instead of using jinja2 -->
             {% for row in transactions %}
                 <tr>
                     {% if row["Type"] == "Expense" %}
@@ -29,7 +40,87 @@
             {% endfor %}
         </tbody>
     </table>
-
+    
     <a href="{{ url_for('main_bp.new_transaction') }}">New Transaction</a>
     <a href="{{ url_for('auth_bp.logout') }}">logout</a>
 {% endblock body %}
+
+{% block CustomScript %}
+    <script> // [x] show all transactions made by month and day
+        var daily_link = document.getElementById('nav-daily-link');
+        var monthly_link = document.getElementById('nav-monthly-link');
+        var summary_link = document.getElementById('nav-summary-link');
+        
+        daily_link.addEventListener("click", () => {
+            var url = "{{ url_for('main_bp.get_data', user_id=current_user.id, filter='day') }}";
+            console.log(url);
+            fetch(url)
+                .then(responde => responde.json())
+                .then(data => {
+                    displayTransactions(data["transactions"]);
+                })
+                .catch(error => console.log(error))
+            daily_link.style.color = "orange";
+            monthly_link.style.color = "rgba(0,0,0,.55)";
+            summary_link.style.color = "rgba(0,0,0,.55)"
+        });
+        
+        monthly_link.addEventListener("click", () => {
+            var url = "{{ url_for('main_bp.get_data', user_id=current_user.id, filter='month') }}";
+            console.log(url);
+            fetch(url)
+                .then(responde => responde.json())
+                .then(data => {
+                    displayTransactions(data["transactions"]);
+                })
+                .catch(error => console.log(error))
+            daily_link.style.color = "rgba(0,0,0,.55)";
+            monthly_link.style.color = "orange";
+            summary_link.style.color = "rgba(0,0,0,.55)"
+        });
+        
+        summary_link.addEventListener("click", () => {
+            var url = "{{ url_for('main_bp.get_data', user_id=current_user.id, filter='summary') }}";
+            console.log(url);
+            fetch(url)
+                .then(responde => responde.json())
+                .then(data => {
+                    displayTransactions(data["transactions"]);
+                })
+                .catch(error => console.log(error))
+            daily_link.style.color = "rgba(0,0,0,.55)";
+            monthly_link.style.color = "rgba(0,0,0,.55)";
+            summary_link.style.color = "orange";
+        });
+
+        function displayTransactions(transactions){
+            const tableBody = document.querySelector("tbody");
+            tableBody.innerHTML = "";
+            transactions.forEach((row) => {
+                const new_row = document.createElement("tr");
+                
+                const amount_cell = document.createElement("td");
+                amount_cell.classList.add("fw-bold");
+                if (row.Type == "Expense"){
+                    amount_cell.classList.add("text-danger");
+                    amount_cell.textContent = "-$" + row.Amount; // TODO add $ symbol
+                }else{
+                    amount_cell.textContent = "$" + row.Amount;
+                }
+                
+                const date_cell = document.createElement("td");
+                date_cell.textContent = row.Date;
+                const type_cell = document.createElement("td");
+                type_cell.textContent = row.Type;
+                const category_cell = document.createElement("td");
+                category_cell.textContent = row.Category 
+
+                new_row.appendChild(amount_cell);
+                new_row.appendChild(date_cell);
+                new_row.appendChild(type_cell);
+                new_row.appendChild(category_cell);
+                tableBody.appendChild(new_row)
+            });
+        }
+    </script>
+{% endblock CustomScript %}

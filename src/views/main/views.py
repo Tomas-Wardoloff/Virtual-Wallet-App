@@ -16,7 +16,7 @@ main_bp = Blueprint(
 @login_required
 def index():
     user_wallet = ModelUser.get_user_wallet(current_user.id)
-    last_transactions = ModelTransaction.get_last_transactions_json(current_user.id)
+    last_transactions = ModelTransaction.get_transactions_data_as_json(current_user.id, "summary")
     return render_template(
         "home.html",
         title="Dashboard",
@@ -46,3 +46,7 @@ def new_transaction():
         flash(f"transaction uploaded successfully!", "success")
         return redirect(url_for("main_bp.index"))
     return render_template("new_transaction.html", title="New Transaction", form=form)
+
+@main_bp.route("/rest-api/get/<user_id>/<filter>", methods=["GET"])
+def get_data(user_id, filter):
+    return ModelTransaction.get_transactions_data_as_json(user_id, filter)
