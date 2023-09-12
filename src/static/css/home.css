@@ -1,0 +1,107 @@
+.sidebar{
+    position: fixed;
+    height: 100%;
+    width: 78px;
+    top: 0;
+    left: 0;
+    padding: 6px 14px;
+    background: #1f1d2e;
+    transition: all 0.5s ease;;
+}
+.sidebar.active{
+    width: 240px;
+}
+.sidebar .logo_content .logo{
+    color: #FBFEFB;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+}
+.sidebar.active .logo_content .logo{
+    opacity: 1;
+    pointer-events: none;
+}
+.logo_content .logo i{
+    font-size: 24px;
+    margin-right: 5px;
+}
+.logo_content .logo .logo_name{
+    font-size: 20px;
+    font-weight: 400;
+}
+.sidebar #btn{
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    font-size: 24px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    transform: translateX(-50%);
+    color: #FBFEFB;
+}
+.sidebar.active #btn{
+    left: 90%;
+}
+.sidebar ul{
+    margin-top: 20px;
+    padding: 0px;
+}
+.sidebar ul li{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 5px 0;
+    list-style: none;
+    line-height: 50px;
+}
+.sidebar ul li a{
+    border-radius: 12px;
+    color: #FBFEFB;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    white-space: nowrap;
+}
+.sidebar ul li a i{
+    font-size: 20px;
+    height:  50px;
+    min-width: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+    text-align: center;
+}
+.sidebar .links_name{
+    opacity: 0;
+    pointer-events: none;
+}
+.sidebar.active .links_name{
+    opacity: 1;
+    pointer-events: auto;
+}
+.sidebar ul li a:hover{
+    color: #1f1d2e;
+    background: #FBFEFB;
+}
+.home_content{
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 78px);
+    left: 78px;
+    transition: all 0.5s ease;
+}
+.home_content .text{
+    font-size: 25px;
+    font-weight: 500;
+    color: #1f1d2e;
+    margin: 12px;
+}
+.sidebar.active ~ .home_content{
+    width: calc(100% - 240px);
+    left: 240px;
+}
