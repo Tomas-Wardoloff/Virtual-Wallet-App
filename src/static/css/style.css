@@ -1,4 +1,9 @@
-.content-section {
+.form-container{
+    position: absolute;
+    top: 100px;
+    width: 100%;
+}
+.content-section{
     padding: 10px 20px;
     border: 1px solid #dddddd;
     border-radius: 12px;
