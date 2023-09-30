@@ -1,27 +1,27 @@
 from flask_wtf import FlaskForm
 from wtforms import (
-    SubmitField,
     DateField,
     DecimalField,
     SelectField,
-    TextAreaField,
     StringField,
+    SubmitField,
+    TextAreaField,
 )
 from wtforms.validators import DataRequired, Length, Optional
 
 
 class TransactionForm(FlaskForm):
     categories_names = [
-        "Groceries",
-        "Utilities",
-        "Transportation",
-        "Housing",
-        "Eating Out",
-        "Entertainment",
-        "Clothing",
-        "Healthcare",
-        "Education",
-        "Miscellaneous",
+        (1, "Groceries"),
+        (2, "Utilities"),
+        (3, "Transportation"),
+        (4, "Housing"),
+        (5, "Eating Out"),
+        (6, "Entertainment"),
+        (7, "Clothing"),
+        (8, "Healthcare"),
+        (9, "Education"),
+        (10, "Miscellaneous"),
     ]
 
     amount = DecimalField("Amount", validators=[DataRequired()])
@@ -31,6 +31,6 @@ class TransactionForm(FlaskForm):
     )
     description = TextAreaField("Description", validators=[Optional(), Length(max=256)])
     category = SelectField(
-        "Category", validators=[DataRequired()], choices=categories_names
+        "Category", validators=[DataRequired()], coerce=int, choices=categories_names
     )
     submit = SubmitField("Upload transaction")
