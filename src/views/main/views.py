@@ -2,6 +2,7 @@ from flask import Blueprint, flash, jsonify, redirect, render_template, request,
 from flask_login import current_user, login_required
 
 from forms.transaction_forms import TransactionForm
+from models.ModelCategories import ModelCategory
 from models.ModelTransaction import ModelTransaction
 from models.ModelUser import ModelUser
 from models.ModelWallet import ModelWallet
@@ -55,9 +56,9 @@ def get_transaction(user_id, filter_option):
 
 
 @main_bp.route("/categories/<int:user_id>/<filter_option>", methods=["GET"])
-def get_categories(user_id, filter_option):  
+def get_categories(user_id, filter_option):
     try:
-        data = ModelTransaction.get_categories_totals(user_id, filter_option)
+        data = ModelCategory.get_categories_totals(user_id, filter_option)
         return data
     except Exception as e:
         return jsonify({"error": str(e)}), 500
